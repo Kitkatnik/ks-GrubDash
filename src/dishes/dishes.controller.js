@@ -84,7 +84,6 @@ function update (req, res, next){
         dish.image_url = image_url;
 
         res.json({ data: dish })
-
 }
 
 function destroy (req, res, next){

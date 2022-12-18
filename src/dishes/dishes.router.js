@@ -6,6 +6,7 @@ router
     .route("/:dishId")
     .get(controller.read)
     .put(controller.update)
+    .all(methodNotAllowed)
 
 router
     .route("/")
