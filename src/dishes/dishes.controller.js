@@ -43,11 +43,22 @@ function create (req, res, next){
 }
 
 function dishExists (req, res, next){
-    return next();
+    const { dishId } = req.params;
+
+    const foundDish = dishes.find( dish => dish.id == dishId );
+
+    if(foundDish){
+        res.locals.dish = foundDish;
+        return next();
+    }
+    return next({
+        status: 404,
+        message: `Dish does not exist`
+    })
 }
 
 function read (req, res, next){
-    return next();
+    res.json({ data: res.locals.dish })
 }
 
 function update (req, res, next){
