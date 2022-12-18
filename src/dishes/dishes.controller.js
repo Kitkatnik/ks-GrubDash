@@ -11,6 +11,18 @@ function bodyHasData(property) {
         const {data} = req.body;
         const currDish = data[property];
 
+        if(property === "id"){
+            if(currDish){
+                if(currDish != req.params.dishId){
+                    next({
+                        status: 400,
+                        message: `Dish id does not match route id. Dish: ${currDish}, Route: ${req.params.dishId}`
+                    })
+                }
+            }
+            return next();
+        }
+
         if (property === "price" && currDish <= 0) {
                 return next({
                 status: 400,
@@ -69,21 +81,14 @@ function read (req, res, next){
 
 function update (req, res, next){
     const dish = res.locals.dish;
-    const { data: { id, name, description, price, image_url } = {} } = req.body;
+    const { data: { id, name, description, price, image_url }} = req.body;
 
-        if(id && id != dish.id){
-            return next({
-                status: 400,
-                message: `Dish id does not match route id. Dish: ${id}, Route: ${dish.id}`
-            })
-        }
+    dish.name = name;
+    dish.description = description;
+    dish.price = price;
+    dish.image_url = image_url;
 
-        dish.name = name;
-        dish.description = description;
-        dish.price = price;
-        dish.image_url = image_url;
-
-        res.json({ data: dish })
+    res.json({ data: dish })
 }
 
 function destroy (req, res, next){
@@ -109,6 +114,7 @@ module.exports = {
         bodyHasData("description"), 
         bodyHasData("price"), 
         bodyHasData("image_url"), 
+        bodyHasData("id"), 
         update
     ],
     delete: [dishExists, destroy],

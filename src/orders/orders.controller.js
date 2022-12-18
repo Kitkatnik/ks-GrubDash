@@ -96,7 +96,6 @@ function read (req, res, next){
 
 function update (req, res, next){
     const order = res.locals.order;
-    console.log(order)
     if( order.status === "delivered"){
         return next({
             status: 400,
