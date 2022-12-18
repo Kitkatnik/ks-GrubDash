@@ -17,6 +17,12 @@ function bodyHasData(property) {
                 message: `Missing ${property}. Please fill in all the fields.`
             })
         }
+        if (property === "price" && typeof currDish !== "number") {
+            return next({
+            status: 400,
+            message: `Missing ${property}. Please fill in all the fields.`
+        })
+    }
         if(!currDish || currDish === "") {
             return next({
                 status: 400,
@@ -53,7 +59,7 @@ function dishExists (req, res, next){
     }
     return next({
         status: 404,
-        message: `Dish does not exist`
+        message: `Dish does not exist: ${dishId}`
     })
 }
 
@@ -62,7 +68,23 @@ function read (req, res, next){
 }
 
 function update (req, res, next){
-    return next();
+    const dish = res.locals.dish;
+    const { data: { id, name, description, price, image_url } = {} } = req.body;
+
+        if(id && id != dish.id){
+            return next({
+                status: 400,
+                message: `Dish id does not match route id. Dish: ${id}, Route: ${dish.id}`
+            })
+        }
+
+        dish.name = name;
+        dish.description = description;
+        dish.price = price;
+        dish.image_url = image_url;
+
+        res.json({ data: dish })
+
 }
 
 function destroy (req, res, next){
@@ -82,7 +104,14 @@ module.exports = {
         create
     ],
     read: [dishExists, read],
-    update: [dishExists, bodyHasData("name"), update],
+    update: [
+        dishExists, 
+        bodyHasData("name"), 
+        bodyHasData("description"), 
+        bodyHasData("price"), 
+        bodyHasData("image_url"), 
+        update
+    ],
     delete: [dishExists, destroy],
     list
 }
