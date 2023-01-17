@@ -4,7 +4,7 @@
 
 <img width="483" alt="GrubDash_copy" src="https://user-images.githubusercontent.com/5871075/208285286-97fdf482-c8ba-4aa1-9d77-3b237a90bb8f.png">
 
-[Click Here to Demo](https://grubdash-backend-86zi.onrender.com)
+[Click Here to Demo](https://grubdash-frontend-z3su.onrender.com)
 
 </div>
 
